@@ -4,10 +4,24 @@
 
 - THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
 
-## SLIDE 1 {-}
+## What are tensors? {-}
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+```{r}
+library(torch)
+t1 <- torch_tensor(2)
+summary(t1)
+t1$dtype
+t1$device
+t1$shape
+t2 <- t1$to(dtype = torch_int())
+t2$dtype
+t2 <- t1$to(device = "cuda")
+t2$device
+t3 <- t1$view(c(1,1))
+t3$shape
+```
+
+## Creating tensors
 
 ## Meeting Videos {-}
 
