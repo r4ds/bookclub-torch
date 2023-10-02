@@ -6,22 +6,108 @@
 
 ## What are tensors? {-}
 
+> "*tensors* are 'just' multi-dimensional arrays optimized for fast computation - 
+not on the CPU only but also on specialized devices such as GPUs and TPUs.
+
+Create a tensor:
+
 ```{r}
 library(torch)
 t1 <- torch_tensor(2)
-summary(t1)
-t1$dtype
-t1$device
-t1$shape
-t2 <- t1$to(dtype = torch_int())
-t2$dtype
-t2 <- t1$to(device = "cuda")
-t2$device
+
 t3 <- t1$view(c(1,1))
 t3$shape
 ```
 
+Parameters of `torch_tensor()` (see help file for this function):
+
+* `data`
+* `dtype`
+* `device`
+* `requires_grad`
+* `pin_memory`
+
+Look at the attributes of the tensor:
+
+```{r}
+summary(t1)
+t1$dtype
+t1$device
+t1$shape
+```
+
+Change attributes:
+
+```{r}
+# to integer:
+t2 <- t1$to(dtype = torch_int())
+t2$dtype
+
+# utilize GPU:
+t2 <- t1$to(device = "cuda")
+t2$device
+```
+
+
+
+
 ## Creating tensors
+
+### Tensors from values
+
+Defaults: long integer type and CPU device.
+
+```{r}
+torch_tensor(1:5, dtype = torch_float(), device = "cuda")
+```
+
+Matrix:
+
+```{r}
+torch_tensor(matrix(1:9, ncol = 3, byrow = TRUE))
+```
+
+Higher dimensions:
+
+```{r}
+torch_tensor(array(1:24, dim = c(4,3,2)))
+```
+
+### Tensors from specifications
+
+```{r}
+#normal distribution:
+torch_randn(3, 3)
+
+#unfiorm distribution
+torch_rand(3, 3)
+```
+
+```{r}
+torch_zeros(2,2)
+torch_ones(3,3)
+torch_eye(3,3)
+torch_diag(c(1,2,3))
+```
+
+See full list at https://torch.mlverse.org/docs/reference/#tensor-creation-utilities. 
+
+### Tensors from datasets
+
+```{r}
+JohnsonJohnson
+```
+
+```{r}
+library(modeldata) # Need to install 0.1.1 to obtain okc data. https://cran.r-project.org/src/contrib/Archive/modeldata/
+library(tidyverse)
+
+data(okc)
+okc |> glimpse()
+```
+
+If your data contains `NA`s, you'll need to convert them before training a neural network 
+(topic to be covered later).
 
 ## Meeting Videos {-}
 
