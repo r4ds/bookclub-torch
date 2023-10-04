@@ -59,8 +59,8 @@ t2 <- t1$to(dtype = torch_int())
 t2$dtype
 
 # utilize GPU:
-t2 <- t1$to(device = "cuda")
-t2$device
+#t2 <- t1$to(device = "cuda")
+#t2$device
 ```
 
 
@@ -91,7 +91,7 @@ class(1:2)
 
 Set the type and device:
 
-```{r}
+```{r eval=FALSE}
 torch_tensor(1:5, dtype = torch_float(), device = "cuda")
 ```
 
