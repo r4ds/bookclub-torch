@@ -9,8 +9,13 @@ Depends:
     R (>= 3.1.0)
 Imports: 
     bookdown,
+<<<<<<< HEAD
     dplyr,
     ggplot2,
+=======
+    modeldata,
+>>>>>>> d36bbd5bbf1b42eeee76707e856fe1e682ab47ad
     rmarkdown,
+    tidyverse,
     torch
 Encoding: UTF-8
