@@ -19,7 +19,8 @@ Load libraries:
 
 ```{r message = FALSE, warning=FALSE}
 library(torch)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 Create a tensor:
