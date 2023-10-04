@@ -15,24 +15,23 @@ From the book:
 > "... *tensors* are 'just' multi-dimensional arrays optimized for fast computation - 
 not on the CPU only but also on specialized devices such as GPUs and TPUs.
 
-Similar to an R array object.
-
 Load libraries:
 
+Note: Need to install `modeldata` 0.1.1 to obtain `okc` data. Download package from https://cran.r-project.org/src/contrib/Archive/modeldata/.
+
 ```{r message = FALSE, warning=FALSE}
-library(tidyverse)
 library(torch)
-library(modeldata) # Need to install 0.1.1 to obtain okc data. https://cran.r-project.org/src/contrib/Archive/modeldata/
+library(tidyverse)
+library(modeldata) 
 ```
+
+
 
 Create a tensor:
 
 ```{r}
 t1 <- torch_tensor(2)
 t1$shape
-
-t3 <- t1$view(c(1,1))
-t3$shape
 ```
 
 Parameters of `torch_tensor()` (see help file for this function):
@@ -46,10 +45,10 @@ Parameters of `torch_tensor()` (see help file for this function):
 Look at the attributes of the tensor:
 
 ```{r}
-summary(t1)
 t1$dtype
 t1$device
 t1$shape
+summary(t1)
 ```
 
 Change attributes:
@@ -69,7 +68,28 @@ t2$device
 
 ### Tensors from values
 
-Defaults: long integer type and CPU device.
+**Defaults**: long integer type and CPU device.
+
+Let's test this:
+
+```{r}
+torch_tensor(1:2)
+```
+
+
+```{r}
+torch_tensor(c(1,2))
+```
+
+My guess is that the difference is due to the data types of `1:2` and `c(1,2)`:
+
+```{r hold=TRUE}
+class(c(1,2))
+class(1:2)
+```
+
+
+Set the type and device:
 
 ```{r}
 torch_tensor(1:5, dtype = torch_float(), device = "cuda")
@@ -224,6 +244,11 @@ t <- torch_tensor(matrix(1:4, ncol = 2, byrow = TRUE))
 t[-1, -1]
 ```
 
+```{r}
+t <- torch_tensor(1:4)
+t[-1]
+```
+
 Compare to R:
 
 ```{r}
@@ -263,12 +288,18 @@ Two methods:
 t <- torch_tensor(matrix(1:15, nrow = 3, byrow = TRUE))
 t
 t$stride()
+```
 
-# Change shape of t using view():
+`$stride()` tells us the jump necessary to go from one element to the next in a single dimension (e.g. the stride necessary to get from one row to the next).
+
+Next, change shape of `t` using `view()`:
+
+```{r}
 t2 <- t$view(c(5,3))
 t2
 t2$stride()
 ```
+
 
 Check memory location:
 
@@ -278,7 +309,7 @@ t2$storage()$data_ptr() # same location
 ```
 
 
-View vs reshape:
+`view()` vs `reshape()`:
 
 When two operations that change the stride are done in sequence, this will likely fail.
 Below is an example of transpose, `t()` followed by `view()`.
