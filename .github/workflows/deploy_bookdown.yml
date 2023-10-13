@@ -7,8 +7,4 @@ on:
 
 jobs:
   bookdown:
-    runs-on: ubuntu-latest
-    env:
-      TORCH_INSTALL: 1
-    steps:
-      - uses: r4ds/r4dsactions/.github/workflows/render_pages.yml@main
+    uses: r4ds/r4dsactions/.github/workflows/render_pages.yml@main

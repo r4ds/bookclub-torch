@@ -4,6 +4,13 @@
 
 - THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
 
+## Setup {-}
+
+```{r install-torch}
+Sys.setenv(TORCH_INSTALL = 1)
+library(torch)
+```
+
 ## SLIDE 1 {-}
 
 - ADD SLIDES AS SECTIONS (`##`).
