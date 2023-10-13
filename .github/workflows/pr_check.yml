@@ -7,6 +7,6 @@ on:
 
 jobs:
   pr_check:
+    uses: r4ds/r4dsactions/.github/workflows/render_check.yml@main
     env:
       TORCH_INSTALL: 1
-    uses: r4ds/r4dsactions/.github/workflows/render_check.yml@main
