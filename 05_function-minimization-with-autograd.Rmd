@@ -2,23 +2,96 @@
 
 **Learning objectives:**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+-   Apply concepts learned in the previous two chapters
 
-## SLIDE 1 {-}
+## An Optimization Classic {.unnumbered}
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+**Example**:
 
-## Meeting Videos {-}
+*Rosenbrock function*: A function of two variables with minimum at `(1,1)`, which lies inside a narrow valley:
 
-### Cohort 1 {-}
+$$
+(a- x_1)^2 + b(x_2 - x_1^2)^2
+$$
+
+<center>[![rosenbrock function](images/rosenbrock.png)](https://skeydan.github.io/Deep-Learning-and-Scientific-Computing-with-R-torch/optim_1.html#an-optimization-classic)</center>
+
+```{r}
+a <- 1
+b <- 5
+
+rosenbrock <- function(x){
+  x1 <- x[1]
+  x2 <- x[2]
+  (a - x1)^2 + b * (x2 - x1^2)^2
+}
+```
+
+## Minimization from Scratch {.unnumbered}
+
+Goal: Starting from a point `(x1, x2)` find minimum of the Rosenbrock function.
+
+Approach: Use the function's gradient.
+
+Setup:
+
+```{r}
+library(torch)
+
+lr <- 0.01 # learning rate
+num_interations <- 1000
+
+x <- torch_tensor(c(-1, 1), requires_grad = TRUE)
+```
+
+`x` is the parameter with respect to which we want to compute the function's derivative. Thus, we set `requires_grad = TRUE`. We have arbitrarily chosen `x = (-1, 1)` as a starting point of our search.
+
+A couple of things to point out about the code below:
+
+-   We use the `with_no_grad()` function. Reason: Because we set `requires_grad = TRUE` in the definition of `x`, torch will include all operations on `x` (including this one) in the derivative calculation, which we don't want.
+-   Recall from Chapter 3 that `x$sub_()` (*with an underscore*) will modify the value of `x`. Similarly, `x$grad$zero_()` will also modify `x`.
+-   We use `x$grad$zero_()` to zero out the `grad` field of `x`. By default, torch accumulates gradients.
+
+```{r eval=FALSE}
+for(i in 1:num_interations){
+  if(i %% 100 == 0) cat("Iteration: ", i, "\n")
+  
+  # Compute value of function:
+  value <- rosenbrock(x)
+  if(i %% 100 == 0) cat("Value is: ", as.numeric(value), "\n")
+  
+  # Compute derivative
+  value$backward()
+  if(i %% 100 == 0) cat("Gradient is: ", as.matrix(x$grad), "\n\n")
+  
+  with_no_grad({
+   x$sub_(lr * x$grad) # Take a step of size lr in the (negative) direction of the gradient
+   x$grad$zero_()
+  })
+}
+
+```
+
+Let's check the value of `x`:
+
+```{r}
+x
+```
+
+It's close to 1 (the true minimum)!
+
+## Meeting Videos {.unnumbered}
+
+### Cohort 1 {.unnumbered}
 
 `r knitr::include_url("https://www.youtube.com/embed/URL")`
 
 <details>
-<summary> Meeting chat log </summary>
 
-```
+<summary>Meeting chat log</summary>
+
+```         
 LOG
 ```
+
 </details>
