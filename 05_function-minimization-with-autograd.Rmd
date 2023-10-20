@@ -29,11 +29,11 @@ rosenbrock <- function(x){
 
 ## Minimization from Scratch {.unnumbered}
 
-Goal: Starting from a point `(x1, x2)` find minimum of the Rosenbrock function.
+**Goal**: Starting from a point `(x1, x2)` find minimum of the Rosenbrock function.
 
-Approach: Use the function's gradient.
+**Approach**: Use the function's gradient.
 
-Setup:
+**Setup**:
 
 ```{r}
 library(torch)
@@ -49,7 +49,7 @@ x <- torch_tensor(c(-1, 1), requires_grad = TRUE)
 A couple of things to point out about the code below:
 
 -   We use the `with_no_grad()` function. Reason: Because we set `requires_grad = TRUE` in the definition of `x`, torch will include all operations on `x` (including this one) in the derivative calculation, which we don't want.
--   Recall from Chapter 3 that `x$sub_()` (*with an underscore*) will modify the value of `x`. Similarly, `x$grad$zero_()` will also modify `x`.
+-   Recall from [Chapter 3](<https://r4ds.github.io/bookclub-torch/operations-on-tensors.html>) that `x$sub_()` (*with an underscore*) will modify the value of `x`. Similarly, `x$grad$zero_()` will also modify `x`.
 -   We use `x$grad$zero_()` to zero out the `grad` field of `x`. By default, torch accumulates gradients.
 
 ```{r eval=FALSE}
