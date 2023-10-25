@@ -8,13 +8,15 @@
 
 **Example**:
 
-*Rosenbrock function*: A function of two variables with minimum at `(1,1)`, which lies inside a narrow valley:
+*Rosenbrock function*: A function of two variables with minimum at $(a,a^2)$, which lies inside a narrow valley:
 
 $$
 (a- x_1)^2 + b(x_2 - x_1^2)^2
 $$
 
 <center>[![rosenbrock function](images/rosenbrock.png)](https://skeydan.github.io/Deep-Learning-and-Scientific-Computing-with-R-torch/optim_1.html#an-optimization-classic)</center>
+
+Below we set values for `a` and `b` and define the `rosenbrock` function. We expect the minimum of the function to be at $(1,1)$ (when `a=1`).
 
 ```{r}
 a <- 1
@@ -46,27 +48,37 @@ x <- torch_tensor(c(-1, 1), requires_grad = TRUE)
 
 `x` is the parameter with respect to which we want to compute the function's derivative. Thus, we set `requires_grad = TRUE`. We have arbitrarily chosen `x = (-1, 1)` as a starting point of our search.
 
-A couple of things to point out about the code below:
+Next we perform the minimization. For each iteration we will:
+
+1.  Compute the value of the `rosenbrock` function at the current value of `x`.
+
+2.  Compute the gradient at `x` (i.e. direction of steepest ascent).
+
+3.  Take a step of size `lr` in the (negative) direction of the gradient.
+
+4.  Repeat.
+
+A few things to point out about the code below:
 
 -   We use the `with_no_grad()` function. Reason: Because we set `requires_grad = TRUE` in the definition of `x`, torch will include all operations on `x` (including this one) in the derivative calculation, which we don't want.
--   Recall from [Chapter 3](<https://r4ds.github.io/bookclub-torch/operations-on-tensors.html>) that `x$sub_()` (*with an underscore*) will modify the value of `x`. Similarly, `x$grad$zero_()` will also modify `x`.
+-   Recall from [Chapter 3](https://r4ds.github.io/bookclub-torch/operations-on-tensors.html) that `x$sub_()` (*with an underscore*) will modify the value of `x`. Similarly, `x$grad$zero_()` will also modify `x`.
 -   We use `x$grad$zero_()` to zero out the `grad` field of `x`. By default, torch accumulates gradients.
 
-```{r eval=FALSE}
+```{r}
 for(i in 1:num_interations){
-  if(i %% 100 == 0) cat("Iteration: ", i, "\n")
+  if(i %% 200 == 0) cat("Iteration: ", i, "\n")
   
   # Compute value of function:
   value <- rosenbrock(x)
-  if(i %% 100 == 0) cat("Value is: ", as.numeric(value), "\n")
+  if(i %% 200 == 0) cat("Value is: ", as.numeric(value), "\n")
   
-  # Compute derivative
+  # Compute the gradient 
   value$backward()
-  if(i %% 100 == 0) cat("Gradient is: ", as.matrix(x$grad), "\n\n")
+  if(i %% 200 == 0) cat("Gradient is: ", as.matrix(x$grad), "\n\n")
   
   with_no_grad({
    x$sub_(lr * x$grad) # Take a step of size lr in the (negative) direction of the gradient
-   x$grad$zero_()
+   x$grad$zero_() # Zero out grad field of x.
   })
 }
 
@@ -78,7 +90,9 @@ Let's check the value of `x`:
 x
 ```
 
-It's close to 1 (the true minimum)!
+It's close to (1,1) (the true minimum)!
+
+> Exercise: What kind of difference does the learning rate make? Try `lr=0.001` and `lr=0.1`, respectively.
 
 ## Meeting Videos {.unnumbered}
 
