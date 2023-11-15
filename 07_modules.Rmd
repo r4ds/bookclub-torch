@@ -2,12 +2,66 @@
 
 **Learning objectives:**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+- Introduce *modules*
+- 
 
-## SLIDE 1 {-}
+## Modules defined
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+modules:
+
+* an object that encapsulates state
+* can be of any complexity (e.g. layer, or models consisting of layers)
+
+
+## Built-in `nn_module()s` {-}
+
+
+```{r}
+library(torch)
+
+l <- nn_linear(in_features = 5, out_features = 16)
+l
+```
+
+
+## Building up a Model {-}
+
+### Sequential Models
+
+multi-layer perceptron (MLP)
+
+```{r}
+mlp <- nn_sequential(
+  nn_linear(10, 32),
+  nn_relu(),
+  nn_linear(32,64),
+  nn_relu(),
+  nn_linear(64,1)
+)
+```
+
+
+### 7.2.2
+
+```{r}
+my_linear <- nn_module(
+  initialize = function(in_features, out_features){
+    self$w <- nn_parameter(torch_randn(in_features, out_features))
+    self$b <- nn_parameter(torch_zeros(out_features))
+  },
+  forward = function(input){
+    input$mm(self$w) + self$b
+  }
+)
+```
+
+```{r}
+l <- my_linear(7, 1)
+l
+```
+
+
+##  {-}
 
 ## Meeting Videos {-}
 
