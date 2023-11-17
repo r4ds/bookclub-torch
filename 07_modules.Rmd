@@ -2,36 +2,59 @@
 
 **Learning objectives:**
 
-- Introduce *modules*
-- 
+Learn about *modules* with focus on `nn_linear()`, `nn_squential()`, and `nn_module()`
 
-## Modules defined
+## Built-in `nn_module()s` {.unnumbered}
 
-modules:
+**What are modules?**
 
-* an object that encapsulates state
-* can be of any complexity (e.g. layer, or models consisting of layers)
+:   -   an object that encapsulates state
+    -   can be of any complexity (e.g. layer, or models consisting of layers)
 
+Examples of `{torch}` modules:
 
-## Built-in `nn_module()s` {-}
+-   linear: `nn_linear()`
+-   convolutional: `nn_linear()`, `nn_conf1d()`, `nn_conv_3d()`
+-   recurrent: `nn_lstm()`, `nn_gru()`
+-   embedding: `nn_embedding()`
+-   multi-head attention: `nn_multihead_attention()`
+-   See [torch documentation](https://torch.mlverse.org/docs/reference/#neural-network-modules) for others
 
+Consider the [linear layer](https://torch.mlverse.org/docs/reference/nn_linear):
 
 ```{r}
 library(torch)
 
-l <- nn_linear(in_features = 5, out_features = 16)
+l <- nn_linear(in_features = 5, out_features = 16) #bias = TRUE is default
 l
 ```
 
-
-## Building up a Model {-}
-
-### Sequential Models
-
-multi-layer perceptron (MLP)
+Comment about size: We expect `l` to be $5 \times 16$ (i.e for matrix multiplication: $X_{50\times5}* \beta_{5 \times 16}$. We see below that it is $16 \times 5$, which is due to the underlying C++ implementation of `libtorch`. For performance reasons, the transpose is stored.
 
 ```{r}
-mlp <- nn_sequential(
+l$weight$size()
+```
+
+Apply the module:
+
+```{r}
+#Generate data: generated from the normal distribution
+x <- torch_randn(50, 5) 
+
+# Feed x into layer:
+output <- l(x)
+
+output$size()
+```
+
+When we use built-in modules, `requires_grad = TRUE` is [*not*]{.underline} required in creation of the tensor (unlike previous chapters). It's taken care of for us.
+
+## Sequential Models {.unnumbered}
+
+[`nn_squential()`](https://torch.mlverse.org/docs/reference/nn_sequential) can be used for models consisting solely of linear layers (i.e. a Multi-Layer Perceptron (MLP)). Below we build an MLP using this method:
+
+```{r}
+mlp <- nn_sequential( # all arguments should be modules
   nn_linear(10, 32),
   nn_relu(),
   nn_linear(32,64),
@@ -40,14 +63,27 @@ mlp <- nn_sequential(
 )
 ```
 
+Apply this model to random data:
 
-### 7.2.2
+```{r}
+mlp(torch_randn(5, 10))
+```
+
+## Non-sequential Models {.unnumbered}
+
+[`nn_module()`](https://torch.mlverse.org/docs/reference/nn_module) is "factory function" for building models of arbitrary complexity. More flexible than the sequential model. Use to define:
+
+-   weight initialization
+
+-   model structure (forward pass), including identification of model parameters using `nn_parameter()` .
+
+Example:
 
 ```{r}
 my_linear <- nn_module(
   initialize = function(in_features, out_features){
-    self$w <- nn_parameter(torch_randn(in_features, out_features))
-    self$b <- nn_parameter(torch_zeros(out_features))
+    self$w <- nn_parameter(torch_randn(in_features, out_features)) # random normal
+    self$b <- nn_parameter(torch_zeros(out_features))              # zeros
   },
   forward = function(input){
     input$mm(self$w) + self$b
@@ -55,24 +91,27 @@ my_linear <- nn_module(
 )
 ```
 
+Next instantiate the model with input and output dimensions:
+
 ```{r}
 l <- my_linear(7, 1)
 l
 ```
 
+##  {.unnumbered}
 
-##  {-}
+## Meeting Videos {.unnumbered}
 
-## Meeting Videos {-}
-
-### Cohort 1 {-}
+### Cohort 1 {.unnumbered}
 
 `r knitr::include_url("https://www.youtube.com/embed/URL")`
 
 <details>
-<summary> Meeting chat log </summary>
 
-```
+<summary>Meeting chat log</summary>
+
+```         
 LOG
 ```
+
 </details>
