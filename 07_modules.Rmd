@@ -4,7 +4,7 @@
 
 Learn about *modules* with focus on `nn_linear()`, `nn_squential()`, and `nn_module()`
 
-## Built-in `nn_module()s` {.unnumbered}
+## Built-in modules
 
 **What are modules?**
 
@@ -14,11 +14,13 @@ Learn about *modules* with focus on `nn_linear()`, `nn_squential()`, and `nn_mod
 Examples of `{torch}` modules:
 
 -   linear: `nn_linear()`
--   convolutional: `nn_linear()`, `nn_conf1d()`, `nn_conv_3d()`
+-   convolutional: `nn_conf1d()`, `nn_conf2d()`, `nn_conv_3d()`
 -   recurrent: `nn_lstm()`, `nn_gru()`
 -   embedding: `nn_embedding()`
 -   multi-head attention: `nn_multihead_attention()`
 -   See [torch documentation](https://torch.mlverse.org/docs/reference/#neural-network-modules) for others
+
+## Linear Layer: `nn_linear()`
 
 Consider the [linear layer](https://torch.mlverse.org/docs/reference/nn_linear):
 
@@ -29,7 +31,7 @@ l <- nn_linear(in_features = 5, out_features = 16) #bias = TRUE is default
 l
 ```
 
-Comment about size: We expect `l` to be $5 \times 16$ (i.e for matrix multiplication: $X_{50\times5}* \beta_{5 \times 16}$. We see below that it is $16 \times 5$, which is due to the underlying C++ implementation of `libtorch`. For performance reasons, the transpose is stored.
+Comment about size: We expect `l` to be $5 \times 16$ (i.e for matrix multiplication: $X_{50\times5}* \beta_{5 \times 16}$). We see below that it is $16 \times 5$, which is due to the underlying C++ implementation of `libtorch`. For performance reasons, the transpose is stored.
 
 ```{r}
 l$weight$size()
@@ -49,9 +51,9 @@ output$size()
 
 When we use built-in modules, `requires_grad = TRUE` is [*not*]{.underline} required in creation of the tensor (unlike previous chapters). It's taken care of for us.
 
-## Sequential Models {.unnumbered}
+## Sequential Models: `nn_squential()`
 
-[`nn_squential()`](https://torch.mlverse.org/docs/reference/nn_sequential) can be used for models consisting solely of linear layers (i.e. a Multi-Layer Perceptron (MLP)). Below we build an MLP using this method:
+[`nn_squential()`](https://torch.mlverse.org/docs/reference/nn_sequential) can be used for models that propagate straight through the layers. A Multi-Layer Perceptron (MLP) is an example (i.e. a network consisting only of linear layers). Below we build an MLP using this method:
 
 ```{r}
 mlp <- nn_sequential( # all arguments should be modules
@@ -66,10 +68,10 @@ mlp <- nn_sequential( # all arguments should be modules
 Apply this model to random data:
 
 ```{r}
-mlp(torch_randn(5, 10))
+output <- mlp(torch_randn(50, 10))
 ```
 
-## Non-sequential Models {.unnumbered}
+## General Models: `nn_module()`
 
 [`nn_module()`](https://torch.mlverse.org/docs/reference/nn_module) is "factory function" for building models of arbitrary complexity. More flexible than the sequential model. Use to define:
 
@@ -98,7 +100,22 @@ l <- my_linear(7, 1)
 l
 ```
 
-##  {.unnumbered}
+Apply the model to random data (just like we did in the previous section):
+
+```{r}
+output <- l(torch_randn(5, 7))
+output
+```
+
+That was the forward pass. Let's define a (dummy) loss function and compute the gradient:
+
+```{r}
+loss <- output$mean()
+loss$backward() # compute gradient
+l$w$grad #inspect result
+```
+
+## 
 
 ## Meeting Videos {.unnumbered}
 
