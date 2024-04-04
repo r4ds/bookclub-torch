@@ -1,15 +1,15 @@
-# R4DS Deep Learning and Scientific Computing with R torch Book Club
+# DSLC Deep Learning and Scientific Computing with R torch Book Club
 
-Welcome to the R4DS Deep Learning and Scientific Computing with R torch Book Club!
+Welcome to the DSLC Deep Learning and Scientific Computing with R torch Book Club!
 
 We are working together to read [_Deep Learning and Scientific Computing with R torch_](https://skeydan.github.io/Deep-Learning-and-Scientific-Computing-with-R-torch) by Sigrid Keydana (copyright 2023).
-If you would like a print version, please consider purchasing it using our [Amazon Affiliates link](https://amzn.to/3nY8Kez). All profits from purchases through that link go toward maintaining the R4DS Online Learning Community.
-Join the [#book_club-torch](https://rfordatascience.slack.com/archives/C052ZGF5H4G) channel on the [R4DS Slack](https://r4ds.io/join) to participate.
-As we read, we are producing [notes about the book](https://r4ds.io/torch).
+If you would like a print version, please consider purchasing it using our [Amazon Affiliates link](https://amzn.to/3nY8Kez). All profits from purchases through that link go toward maintaining the Data Science Learning Community.
+Join the [#book_club-torch](https://dslcio.slack.com/archives/C052ZGF5H4G) channel on the [DSLC Slack](https://dslc.io/join) to participate.
+As we read, we are producing [notes about the book](https://dslc.io/torch).
 
 ## Meeting Schedule
 
-If you would like to present, please see the sign-up sheet for your cohort (linked below, and pinned in the [#book_club-torch](https://rfordatascience.slack.com/archives/C052ZGF5H4G) channel on Slack)!
+If you would like to present, please see the sign-up sheet for your cohort (linked below, and pinned in the [#book_club-torch](https://dslcio.slack.com/archives/C052ZGF5H4G) channel on Slack)!
 
 - [Cohort 1](https://docs.google.com/spreadsheets/d/1lXaU8dszJ3wU52q7-KGy3VVXb43uZktvdE6Tq8dnkU8/edit?usp=sharing) (started 2023-09-13, facilitated by shamsuddeen): [Wednesdays, 3:00 PM CST/CDT](https://www.timeanddate.com/worldclock/converter.html?iso=20230913T200000&p1=24&p2=1440) | [meeting videos](https://www.youtube.com/playlist?list=PL3x6DOfs2NGhm-maM8ZRC5GfHn6OzJWbH)
 
@@ -40,7 +40,7 @@ Do these steps each time you present another chapter:
 10. When your PR has been accepted ("merged"), `usethis::pr_finish()` to close out your branch and prepare your local repository for future work.
 11. Now that your local copy is up-to-date with the main repo, you need to update your remote fork. Run `gert::git_push("origin")` or click the `Push` button on the `Git` tab of Rstudio.
 
-When your PR is checked into the main branch, the bookdown site will rebuild, adding your slides to [this site](https://r4ds.io/torch).
+When your PR is checked into the main branch, the bookdown site will rebuild, adding your slides to [this site](https://dslc.io/torch).
 
 
 ## Code of Conduct
